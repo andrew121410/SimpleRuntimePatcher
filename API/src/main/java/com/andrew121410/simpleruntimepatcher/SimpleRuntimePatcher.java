@@ -1,7 +1,6 @@
 package com.andrew121410.simpleruntimepatcher;
 
 import com.andrew121410.simpleruntimepatcher.attacher.RemoteAttacher;
-import javassist.ClassPool;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,15 +14,15 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class SimpleRuntimePatcher {
 
     private static final String ATTACH_MOD_PATH = "jmods/jdk.attach.jmod";
 
-    private static final Map<Class<?>, BiFunction<ClassPool, CtClass, byte[]>> TO_PATCH = new HashMap<>();
+    private static final Map<Class<?>, Function<ClassLoader, byte[]>> TO_PATCH = new HashMap<>();
 
-    public static void patch(Class<?> theClass, BiFunction<ClassPool, CtClass, byte[]> biFunction) {
+    public static void patch(Class<?> theClass, Function<ClassLoader, byte[]> biFunction) {
         TO_PATCH.put(theClass, biFunction);
     }
 

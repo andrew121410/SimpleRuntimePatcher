@@ -1,19 +1,16 @@
 package com.andrew121410.simpleruntimepatcher;
 
-import javassist.ClassPool;
-import javassist.CtClass;
-
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class Agent {
 
     private static Agent instance;
 
     private Instrumentation instrumentation;
-    private Map<Class<?>, BiFunction<ClassPool, CtClass, byte[]>> map;
+    private Map<Class<?>, Function<ClassLoader, byte[]>> map;
 
     private Agent(Instrumentation instrumentation) {
         this.instrumentation = instrumentation;
@@ -23,7 +20,7 @@ public class Agent {
         instance = new Agent(instrumentation);
     }
 
-    public void process(Map<Class<?>, BiFunction<ClassPool, CtClass, byte[]>> map) {
+    public void process(Map<Class<?>, Function<ClassLoader, byte[]>> map) {
         this.map = map;
 
         this.instrumentation.addTransformer(new Transformer(map), true);

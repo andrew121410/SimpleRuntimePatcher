@@ -1,18 +1,28 @@
 # SimpleRuntimePatcher
 
-Not working at the moment :(
+###Simple Bytecode Manipulation
+
+### Credit
+Thanks to the creator's of [RuntimePatcher](https://github.com/CraftoryStudios/RuntimePatcher) and [RuntimeTransformer](https://github.com/Yamakaja/RuntimeTransformer)
+###
+**Warning!** We don't include Javassist  
 
 Example:
 ```java
-        SimpleRuntimePatcher.patch(WorkAtComposter.class, (classPool, ctClass) -> {
-            try {
-                CtMethod ctMethod = ctClass.getDeclaredMethod("doWork");
-                ctMethod.insertBefore("Bukkit.broadcastMessage(\"It works!!!\");");
-                return ctClass.toBytecode();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
+        SimpleRuntimePatcher.patch(WorkAtComposter.class, classLoader -> {
+        ClassPool classPool = new ClassPool();
+        classPool.appendClassPath(new LoaderClassPath(classLoader));
+        try {
+        CtClass ctClass = classPool.get(WorkAtComposter.class.getName());
+        CtMethod ctMethod = ctClass.getDeclaredMethod("doWork");
+        ctMethod.insertBefore("System.out.println(\"Yes, it actually works!\");");
+        byte[] byteCode = ctClass.toBytecode();
+        ctClass.detach();
+        return byteCode;
+        } catch (Exception e) {
+        e.printStackTrace();
+        }
+        return null;
         });
 
         SimpleRuntimePatcher.create();
