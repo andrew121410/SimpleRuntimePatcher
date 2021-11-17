@@ -1,5 +1,6 @@
 package com.andrew121410.simpleruntimepatcher;
 
+import com.andrew121410.simpleruntimepatcher.attacher.DirectAttacher;
 import com.andrew121410.simpleruntimepatcher.attacher.RemoteAttacher;
 
 import java.io.File;
@@ -14,15 +15,15 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 public class SimpleRuntimePatcher {
 
     private static final String ATTACH_MOD_PATH = "jmods/jdk.attach.jmod";
 
-    private static final Map<Class<?>, Function<ClassLoader, byte[]>> TO_PATCH = new HashMap<>();
+    private static final Map<Class<?>, BiFunction<ClassLoader, byte[], byte[]>> TO_PATCH = new HashMap<>();
 
-    public static void patch(Class<?> theClass, Function<ClassLoader, byte[]> biFunction) {
+    public static void patch(Class<?> theClass, BiFunction<ClassLoader, byte[], byte[]> biFunction) {
         TO_PATCH.put(theClass, biFunction);
     }
 
@@ -57,10 +58,18 @@ public class SimpleRuntimePatcher {
         }
 
         String agentFilePath = getAgentJar();
-        try {
-            new RemoteAttacher().attachAgent(agentFilePath, getPid());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (canSelfAttach()) {
+            try {
+                new DirectAttacher().attachAgent(agentFilePath, getPid());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                new RemoteAttacher().attachAgent(agentFilePath, getPid());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         //Process agent
@@ -78,6 +87,11 @@ public class SimpleRuntimePatcher {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static boolean canSelfAttach() {
+        String version = System.getProperty("java.version");
+        return version.startsWith("1.");
     }
 
     private static String getPid() {

@@ -4,13 +4,13 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 public class Transformer implements ClassFileTransformer {
 
-    private Map<Class<?>, Function<ClassLoader, byte[]>> map;
+    private Map<Class<?>, BiFunction<ClassLoader, byte[], byte[]>> map;
 
-    public Transformer(Map<Class<?>, Function<ClassLoader, byte[]>> map) {
+    public Transformer(Map<Class<?>, BiFunction<ClassLoader, byte[], byte[]>> map) {
         this.map = map;
     }
 
@@ -20,7 +20,7 @@ public class Transformer implements ClassFileTransformer {
 
         if (this.map.containsKey(classBeingRedefined)) {
             try {
-                byteCode = this.map.get(classBeingRedefined).apply(loader);
+                byteCode = this.map.get(classBeingRedefined).apply(loader, classfileBuffer);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

@@ -1,15 +1,21 @@
 # SimpleRuntimePatcher
 
-###Simple Bytecode Manipulation
+### Simple Bytecode Manipulation
 
 ### Credit
-Thanks to the creator's of [RuntimePatcher](https://github.com/CraftoryStudios/RuntimePatcher) and [RuntimeTransformer](https://github.com/Yamakaja/RuntimeTransformer)
+
+Thanks to the creator's of [RuntimePatcher](https://github.com/CraftoryStudios/RuntimePatcher)
+and [RuntimeTransformer](https://github.com/Yamakaja/RuntimeTransformer)
+
 ###
-**Warning!** We don't include Javassist  
+
+**Warning!** We don't include Javassist
 
 Example:
+
 ```java
-        SimpleRuntimePatcher.patch(WorkAtComposter.class, classLoader -> {
+
+        SimpleRuntimePatcher.patch(WorkAtComposter.class, (classLoader, originalBytecode) -> {
         ClassPool classPool = new ClassPool();
         classPool.appendClassPath(new LoaderClassPath(classLoader));
         try {
@@ -22,8 +28,27 @@ Example:
         } catch (Exception e) {
         e.printStackTrace();
         }
-        return null;
+        return originalBytecode;
         });
 
         SimpleRuntimePatcher.create();
   ```
+
+Maven dependency:
+
+```xml
+
+<dependency>
+    <groupId>com.github.andrew121410</groupId>
+    <artifactId>SimpleRuntimePatcher</artifactId>
+    <version>dea6b5078e</version>
+</dependency>
+```
+
+```xml
+
+<repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+</repository>
+```

@@ -3,14 +3,14 @@ package com.andrew121410.simpleruntimepatcher;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 public class Agent {
 
     private static Agent instance;
 
     private Instrumentation instrumentation;
-    private Map<Class<?>, Function<ClassLoader, byte[]>> map;
+    private Map<Class<?>, BiFunction<ClassLoader, byte[], byte[]>> map;
 
     private Agent(Instrumentation instrumentation) {
         this.instrumentation = instrumentation;
@@ -20,7 +20,7 @@ public class Agent {
         instance = new Agent(instrumentation);
     }
 
-    public void process(Map<Class<?>, Function<ClassLoader, byte[]>> map) {
+    public void process(Map<Class<?>, BiFunction<ClassLoader, byte[], byte[]>> map) {
         this.map = map;
 
         this.instrumentation.addTransformer(new Transformer(map), true);
