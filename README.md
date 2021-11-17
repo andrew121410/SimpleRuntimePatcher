@@ -33,22 +33,3 @@ Example:
 
         SimpleRuntimePatcher.create();
   ```
-
-Maven dependency:
-
-```xml
-
-<dependency>
-    <groupId>com.github.andrew121410</groupId>
-    <artifactId>SimpleRuntimePatcher</artifactId>
-    <version>VERSION</version>
-</dependency>
-```
-
-```xml
-
-<repository>
-    <id>jitpack.io</id>
-    <url>https://jitpack.io</url>
-</repository>
-```
