@@ -41,7 +41,7 @@ Maven dependency:
 <dependency>
     <groupId>com.github.andrew121410</groupId>
     <artifactId>SimpleRuntimePatcher</artifactId>
-    <version>dea6b5078e</version>
+    <version>VERSION</version>
 </dependency>
 ```
 

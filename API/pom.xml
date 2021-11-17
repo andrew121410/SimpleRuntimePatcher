@@ -21,7 +21,7 @@
             <groupId>com.andrew121410</groupId>
             <artifactId>SimpleRuntimePatcher-Agent</artifactId>
             <version>1.0</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
